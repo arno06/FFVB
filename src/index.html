@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FFVB</title>
+        <link href="assets/css/style.css" rel="stylesheet">
+        <link href='http://fonts.googleapis.com/css?family=Lato:400,900' rel='stylesheet' type='text/css'>
+        <script src="../../Dependencies/src/?need=Template,Request"></script>
+        <script type="application/json" id="routing_rules">
+{
+    "home":
+    {
+        "hash":"agenda",
+        "controller":"Index",
+        "action":"agenda",
+        "default":true
+    },
+    "bouboup":
+    {
+        "hash":"ranking",
+        "controller":"Index",
+        "action":"ranking"
+    }
+}
+        </script>
+        <script src="js/fw.js"></script>
+	      <script src="js/main.js"></script>
+    </head>
+    <body>
+        <menu>
+            <li><a href="#agenda">Agenda</a></li>
+            <li><a href="#ranking">Classement</a></li>
+        </menu>
+        <div id="container"></div>
+        <div id="loader"></div>
+        <script type="text/template" id="Index_agenda_tpl">
+            <h1>Agenda</h1>
+            <div class="agenda">
+                {foreach $content.data $item}
+                <div class="weekend">
+                    <h3>{$item.label}</h3>
+                    {foreach $item.matches $match}
+                    <div class="match">
+                        <div class="home">
+                            <span class="name">{$match.home.name}</span>
+                            <span class="name">{$match.home.set}</span>
+                            <span class="name">{$match.home.points}</span>
+                        </div>
+                        <div class="date">
+                            <span class="date">{$match.date} {$match.hour}</span>
+                        </div>
+                        <div class="guest">
+                            <span class="name">{$match.guest.name}</span>
+                            <span class="name">{$match.guest.set}</span>
+                            <span class="name">{$match.guest.points}</span>
+                        </div>
+                    </div>
+                    {/foreach}
+                </div>
+                {/foreach}
+            </div>
+        </script>
+        <script type="text/template" id="Index_ranking_tpl">
+            <h1>Classement</h1>
+            <div class="ranking">
+                {foreach $content.data $item $key}
+                <div class="team">
+                    <div class="position">{=add($key, 1)}</div>
+                    <h2>{$item.name}</h2>
+                    <div class="points">{$item.championship_points} pts</div>
+                </div>
+                {/foreach}
+            </div>
+        </script>
+    </body>
+</html>

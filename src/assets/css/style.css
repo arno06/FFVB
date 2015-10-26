@@ -1,0 +1,44 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: 'Lato', sans-serif;
+}
+body menu {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto ;
+  text-align: right;
+}
+body menu li {
+  display: inline;
+}
+body menu li a {
+  display: inline-block;
+  padding: 10px;
+  text-decoration: none;
+  color: #444;
+  transition: all .3s;
+  border-bottom: solid 3px #fff;
+}
+body menu li a:hover {
+  color: #000;
+  border-bottom-color: #444444;
+}
+
+body h1{text-align: center;font-weight: normal;color: #2c74a4;}
+
+body .ranking{}
+body .ranking .team{display:flex;padding:10px 0;border-top:solid 1px #eee;}
+body .ranking .team:first-of-type{border:none;}
+body .ranking .team .position, body .ranking .team h2, body .ranking .team .points{line-height:30px;}
+body .ranking .team .position{flex-grow: 0;padding:0 10px;font-size:20px;}
+body .ranking .team h2{flex-grow: 1;font-weight:normal;}
+body .ranking .team .points{flex-grow: 0;padding: 0 10px;font-size:20px;}
+
+body .agenda{}
+body .agenda .weekend{}
+body .agenda .weekend h3{}
+body .agenda .weekend .match{display:flex;}
+body .agenda .weekend .match .home{flex-grow: 1;}
+body .agenda .weekend .match .date{flex-grow: 0;display:block;width:65px;text-align:center;}
+body .agenda .weekend .match .guest{flex-grow: 1;text-align: right;}
