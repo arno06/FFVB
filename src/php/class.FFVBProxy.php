@@ -1,14 +1,17 @@
 <?php
 class FFVBProxy
 {
-	const URL = "http://www.ffvbbeach.org/ffvbapp/resu/vbspo_calendrier.php?saison=2015/2016&codent=LIIDF&poule=RME";
+	const URL = "http://www.ffvbbeach.org/ffvbapp/resu/vbspo_calendrier.php?saison=2015/2016&codent=LIIDF&poule=";
 
     private $folder = "../data/";
 	private $file = "data";
     private $data;
+    private $url;
 
-	public function __construct()
+	public function __construct($pWho)
 	{
+        $this->url = self::URL.$pWho;
+        $this->file = $this->file."_".$pWho;
 		$this->parse();
 	}
 
@@ -104,7 +107,7 @@ class FFVBProxy
             return;
         }
 
-		$html = file_get_contents(self::URL);
+		$html = file_get_contents($this->url);
 
 		$this->re_escape('/(\r|\n|\t)/', $html);
 
@@ -207,18 +210,34 @@ class FFVBProxy
 					$points = array("", "");
 				if(!isset($points[1]))
 					$points[1] = "";
+				$sets_home = $this->str($day[6]);
+				$points_home = $points[0];
+				$sets_guest = $this->str($day[7]);
+				$points_guest = $points[1];
+
+				$played = preg_match('/^([0-9])$/', $sets_home, $m)||preg_match('/^([0-9])$/', $sets_guest, $m);
+
+				if($played)
+				{
+					$sets_home = intval($sets_home);
+					$points_home = intval($points_home);
+					$sets_guest = intval($sets_guest);
+					$points_guest = intval($points_guest);
+				}
+
 				$agenda[count($agenda)-1]["matches"][] = array(
 					"date"=>$this->str($day[1]),
 					"hour"=>$this->str($day[2]),
+					"played"=>$played,
 					"home"=>array(
 						"name"=>$this->str($day[3]),
-						"set"=>$this->str($day[6]),
-						"points"=>$points[0]
+						"set"=>$sets_home,
+						"points"=>$points_home
 					),
 					"guest"=>array(
 						"name"=>$this->str($day[5]),
-						"set"=>$this->str($day[7]),
-						"points"=>$points[1]
+						"set"=>$sets_guest,
+						"points"=>$points_guest
 					)
 				);
 			}

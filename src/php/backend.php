@@ -1,12 +1,15 @@
 <?php
 
 include_once("class.FFVBProxy.php");
-
+if(!isset($_GET['who']))
+{
+    output(array('error'=>'Who parameter missing'));
+}
 if(!isset($_GET['what']))
 {
 	output(array("error"=>"Data type missing"));
 }
-$ffvb = new FFVBProxy();
+$ffvb = new FFVBProxy($_GET['who']);
 switch($_GET['what'])
 {
 	case 'ranking':

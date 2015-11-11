@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>FFVB</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="assets/css/style.css" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Lato:400,900' rel='stylesheet' type='text/css'>
         <script src="../../Dependencies/src/?need=Template,Request"></script>
@@ -14,24 +15,34 @@
         "action":"agenda",
         "default":true
     },
-    "bouboup":
+    "ranking":
     {
         "hash":"ranking",
         "controller":"Index",
         "action":"ranking"
+    },
+    "teams":
+    {
+        "hash":"teams",
+        "controller":"Index",
+        "action":"teams"
     }
 }
         </script>
         <script src="js/fw.js"></script>
-	      <script src="js/main.js"></script>
+        <script src="js/main.js"></script>
     </head>
     <body>
+    <header>
+        <h2>CMSE Volley</h2>
         <menu>
             <li><a href="#agenda">Agenda</a></li>
             <li><a href="#ranking">Classement</a></li>
+            <li><a href="#teams">&Eacute;quipes</a></li>
         </menu>
+    </header>
         <div id="container"></div>
-        <div id="loader"></div>
+        <div id="loader" style="display:none;"></div>
         <script type="text/template" id="Index_agenda_tpl">
             <h1>Agenda</h1>
             <div class="agenda">
@@ -39,19 +50,29 @@
                 <div class="weekend">
                     <h3>{$item.label}</h3>
                     {foreach $item.matches $match}
-                    <div class="match">
-                        <div class="home">
+                    <div class="match{if $match.played==true} played{/if}">
+                        <div class="home{if $match.played && $match.home.set>$match.guest.set} won{/if}">
                             <span class="name">{$match.home.name}</span>
-                            <span class="name">{$match.home.set}</span>
-                            <span class="name">{$match.home.points}</span>
+                            {if $match.played}
+                            <div class="score">
+                                <span class="set">{$match.home.set}</span>
+                                <span class="points">{$match.home.points} pts</span>
+                            </div>
+                            {/if}
                         </div>
-                        <div class="date">
-                            <span class="date">{$match.date} {$match.hour}</span>
+                        {if $match.played==false}
+                        <div class="infos">
+                            <span class="date">{$match.date}<br/>{$match.hour}</span>
                         </div>
-                        <div class="guest">
+                        {/if}
+                        <div class="guest{if $match.played && $match.home.set<$match.guest.set} won{/if}">
+                            {if $match.played}
+                            <div class="score">
+                                <span class="set">{$match.guest.set}</span>
+                                <span class="points">{$match.guest.points} pts</span>
+                            </div>
+                            {/if}
                             <span class="name">{$match.guest.name}</span>
-                            <span class="name">{$match.guest.set}</span>
-                            <span class="name">{$match.guest.points}</span>
                         </div>
                     </div>
                     {/foreach}
@@ -61,6 +82,7 @@
         </script>
         <script type="text/template" id="Index_ranking_tpl">
             <h1>Classement</h1>
+            <h3>G&eacute;n&eacute;ral</h3>
             <div class="ranking">
                 {foreach $content.data $item $key}
                 <div class="team">
@@ -69,6 +91,19 @@
                     <div class="points">{$item.championship_points} pts</div>
                 </div>
                 {/foreach}
+            </div>
+        </script>
+        <script type="text/template" id="Index_teams_tpl">
+            <h1>&Eacute;quipes</h1>
+            <div class="team_settings">
+                <div>
+                    <label for="esf">S&eacute;niors F&eacute;minines (Poule RFB)</label>
+                    <input type="radio" id="esf" value="RFB" name="type"{if $content.type=="RFB"} checked="checked"{/if}>
+                </div>
+                <div>
+                    <label for="esm">S&eacute;niors Masculins (Poule RME)</label>
+                    <input type="radio" id="esm" value="RME" name="type"{if $content.type=="RME"} checked="checked"{/if}>
+                </div>
             </div>
         </script>
     </body>
