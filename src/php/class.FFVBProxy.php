@@ -40,7 +40,7 @@ class FFVBProxy
 			if($diff>60)
 				return false;
 			$content = file_get_contents($pFileName);
-			$jsonParsed = json_decode($content);
+			$jsonParsed = json_decode($content, true);
 		}
 		catch(Exception $e)
 		{
@@ -78,10 +78,11 @@ class FFVBProxy
 		$folder = $this->folder;
 		$pFileName = $folder.$pFileName.".json";
 		if(file_exists($pFileName))
-			chmod($pFileName, 0777);
-		else
-			mkdir($pFileName, 0777, true);
-		unlink($pFileName);
+        {
+            unlink($pFileName);
+        }
+        fclose(fopen($pFileName,'x'));
+        chmod($pFileName, 0777);
 		$pContent = json_encode($pContent);
 		file_put_contents($pFileName, $pContent);
 	}
@@ -102,7 +103,7 @@ class FFVBProxy
 
 	private function parse()
 	{
-        if($data = $this->pullFromCache(5))
+        if($this->data = $this->pullFromCache(5))
         {
             return;
         }

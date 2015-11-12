@@ -2,7 +2,6 @@
 <html>
     <head>
         <title>FFVB</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="assets/css/style.css" rel="stylesheet">
         <link href='http://fonts.googleapis.com/css?family=Lato:400,900' rel='stylesheet' type='text/css'>
         <script src="../../Dependencies/src/?need=Template,Request"></script>
@@ -31,15 +30,18 @@
         </script>
         <script src="js/fw.js"></script>
         <script src="js/main.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
     <header>
-        <h2>CMSE Volley</h2>
-        <menu>
-            <li><a href="#agenda">Agenda</a></li>
-            <li><a href="#ranking">Classement</a></li>
-            <li><a href="#teams">&Eacute;quipes</a></li>
-        </menu>
+        <div>
+            <h2>CMSE Volley</h2>
+            <menu>
+                <li><a href="#agenda">Agenda</a></li>
+                <li><a href="#ranking">Classement</a></li>
+                <li><a href="#teams">&Eacute;quipes</a></li>
+            </menu>
+        </div>
     </header>
         <div id="container"></div>
         <div id="loader" style="display:none;"></div>
@@ -88,7 +90,7 @@
                 <div class="team">
                     <div class="position">{=add($key, 1)}</div>
                     <h2>{$item.name}</h2>
-                    <div class="points">{$item.championship_points} pts</div>
+                    <div class="points">{$item.championship_points}&nbsp;pts</div>
                 </div>
                 {/foreach}
             </div>
@@ -97,11 +99,11 @@
             <h1>&Eacute;quipes</h1>
             <div class="team_settings">
                 <div>
-                    <label for="esf">S&eacute;niors F&eacute;minines (Poule RFB)</label>
+                    <label for="esf">S&eacute;niors F&eacute;minines<br/>(Poule RFB)</label>
                     <input type="radio" id="esf" value="RFB" name="type"{if $content.type=="RFB"} checked="checked"{/if}>
                 </div>
                 <div>
-                    <label for="esm">S&eacute;niors Masculins (Poule RME)</label>
+                    <label for="esm">S&eacute;niors Masculins<br/>(Poule RME)</label>
                     <input type="radio" id="esm" value="RME" name="type"{if $content.type=="RME"} checked="checked"{/if}>
                 </div>
             </div>
