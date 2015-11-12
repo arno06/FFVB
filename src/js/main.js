@@ -53,10 +53,8 @@
             this.addEventListener(FwJs.lib.events.RENDER_COMPLETE, function(){
                 document.querySelectorAll('input[name="type"]').forEach(function(pItem){
                     pItem.addEventListener('change', function(e){
-                        if(!e.currentTarget.checked)
-                        {
-                            return;
-                        }
+                        document.querySelector('div.selected').classList.remove('selected');
+                        e.currentTarget.parentNode.classList.add("selected");
                         type = e.currentTarget.value;
                     });
                 });

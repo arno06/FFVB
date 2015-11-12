@@ -163,12 +163,19 @@ class FFVBProxy
 		 */
 		$ranking_p = simplexml_load_string(utf8_encode($table_ranking));
 		$agenda_p = simplexml_load_string(utf8_encode($table_agenda));
-		$ranking = array();
+		$overall = array();
+        $points = array();
+        $set_points = array();
+        $match_points = array();
+        $lost_set_points = array();
+        $lost_match_points = array();
 		for($i = 1, $max = count($ranking_p->tr); $i<$max; $i++)
 		{
 			$team = $ranking_p->tr[$i]->td;
-			$ranking[] = array(
+            $overall[] = array(
+                "position"=>$i,
 				"name"=>strval($team[1]),
+                "coef"=>round((($this->num($team[2]))/($this->num($team[3])*3))*100,2),
 				"championship_points"=>$this->str($team[2]),
 				"matches"=>array(
 					"played"=>$this->num($team[3]),
@@ -186,14 +193,67 @@ class FFVBProxy
 					"played"=>$this->num($team[13])+$this->num($team[14]),
 					"won"=>$this->num($team[13]),
 					"lost"=>$this->num($team[14])
-				),
-				"points"=>array(
-					"played"=>$this->num($team[16])+$this->num($team[17]),
-					"won"=>$this->num($team[16]),
-					"lost"=>$this->num($team[17])
 				)
 			);
+            $points[] = array(
+                "position"=>$i,
+                "name"=>strval($team[1]),
+                "coef"=>round(($this->num($team[16]))/($this->num($team[17])),2),
+                "played"=>$this->num($team[16])+$this->num($team[17]),
+                "won"=>$this->num($team[16]),
+                "lost"=>$this->num($team[17])
+            );
+            $set_points[] = array(
+                "position"=>$i,
+                "name"=>strval($team[1]),
+                "value"=>round(($this->num($team[16]))/($this->num($team[13])+$this->num($team[14])),2),
+            );
+            $match_points[] = array(
+                "position"=>$i,
+                "name"=>strval($team[1]),
+                "value"=>round(($this->num($team[16]))/($this->num($team[3])),2),
+            );
+            $lost_set_points[] = array(
+                "position"=>$i,
+                "name"=>strval($team[1]),
+                "value"=>round(($this->num($team[17]))/($this->num($team[13])+$this->num($team[14])),2),
+            );
+            $lost_match_points[] = array(
+                "position"=>$i,
+                "name"=>strval($team[1]),
+                "value"=>round(($this->num($team[17]))/($this->num($team[3])),2),
+            );
 		}
+
+        usort($points, function($pA, $pB){
+            if($pA['coef'] == $pB['coef'])
+                return 0;
+            return $pA['coef']>$pB['coef']?-1:1;
+        });
+
+        usort($set_points, function($pA, $pB){
+            if($pA['value'] == $pB['value'])
+                return 0;
+            return $pA['value']>$pB['value']?-1:1;
+        });
+
+        usort($match_points, function($pA, $pB){
+            if($pA['value'] == $pB['value'])
+                return 0;
+            return $pA['value']>$pB['value']?-1:1;
+        });
+
+        usort($lost_set_points, function($pA, $pB){
+            if($pA['value'] == $pB['value'])
+                return 0;
+            return $pA['value']<$pB['value']?-1:1;
+        });
+
+        usort($lost_match_points, function($pA, $pB){
+            if($pA['value'] == $pB['value'])
+                return 0;
+            return $pA['value']<$pB['value']?-1:1;
+        });
 
 		$agenda = array();
 
@@ -206,15 +266,15 @@ class FFVBProxy
 			}
 			else
 			{
-				$points = explode(":", $this->str($day[9]));
-				if(!isset($points[0]))
-					$points = array("", "");
-				if(!isset($points[1]))
-					$points[1] = "";
+				$m_points = explode(":", $this->str($day[9]));
+				if(!isset($m_points[0]))
+                    $m_points = array("", "");
+				if(!isset($m_points[1]))
+                    $m_points[1] = "";
 				$sets_home = $this->str($day[6]);
-				$points_home = $points[0];
+				$points_home = $m_points[0];
 				$sets_guest = $this->str($day[7]);
-				$points_guest = $points[1];
+				$points_guest = $m_points[1];
 
 				$played = preg_match('/^([0-9])$/', $sets_home, $m)||preg_match('/^([0-9])$/', $sets_guest, $m);
 
@@ -245,7 +305,12 @@ class FFVBProxy
 		}
 
 		$this->data = array(
-			"ranking"=>$ranking,
+			"ranking"=>array('overall'=>$overall,
+                            'points'=>$points,
+                            'points_per_set'=>$set_points,
+                            'points_per_match'=>$match_points,
+                            'lost_points_per_set'=>$lost_set_points,
+                            'lost_points_per_match'=>$lost_match_points),
 			"agenda"=>$agenda
 		);
 		$this->storeInCache($this->data);

@@ -9,7 +9,7 @@ body *{font-size:1em;}
 
 body #loader{width:32px;height:32px;background:url(../imgs/loader.gif) no-repeat;position:fixed;top:5px;left:50%;margin-left:-16px;}
 
-body header{ position:fixed;width: 100%;top:0;left:0;background:rgba(255, 255, 255, .9);box-shadow:0 1px 2px rgba(0, 0, 0, .3);}
+body header{ position:fixed;width: 100%;top:0;left:0;background:rgba(255, 255, 255, .9);box-shadow:0 1px 2px rgba(0, 0, 0, .3);z-index:999;}
 body header>div{display: flex;max-width:960px;margin:0 auto;}
 body header h2{padding:10px;font-weight:normal;flex-grow: 0;}
 body header menu{flex-grow: 1;text-align: right;}
@@ -21,9 +21,10 @@ body h1{text-align: center;font-weight: normal;color: #2c74a4;font-size:1.5em;}
 
 #container{max-width:960px;margin:0 auto;padding-top:45px;}
 
-body .ranking{background:#fff;box-shadow:0 1px 2px rgba(0, 0, 0, .3);margin:10px 0;}
-body .ranking .team{display:flex;padding:10px 0;border-top:solid 1px #eee;}
+body .ranking{background:#fff;box-shadow:0 1px 2px rgba(0, 0, 0, .3);margin:10px 0 20px;}
+body .ranking .team{display:flex;padding:10px 0;border-top:solid 2px #eee;position:relative;}
 body .ranking .team:first-of-type{border:none;}
+body .ranking .team .coef{position:absolute;top:0;left:0;background: rgba(206, 255, 183, 0.40);height:10px;}
 body .ranking .team .position, body .ranking .team h2, body .ranking .team .points{line-height:30px;}
 body .ranking .team .position{flex-grow: 0;padding:0 10px;font-size:1.2em;}
 body .ranking .team h2{flex-grow: 1;font-weight:normal;}
@@ -49,5 +50,6 @@ body .agenda .weekend .match.played>div.won{}
 body .agenda .weekend .match.played>div.won .score span.set{font-weight:bold;}
 
 body .team_settings{background:#fff;box-shadow:0 1px 2px rgba(0, 0, 0, .3);margin:10px 0;padding:20px;display:flex;}
-body .team_settings>div{flex-grow: 1;width:50%;text-align: center;}
+body .team_settings>div{flex-grow: 1;width:50%;text-align: center;border:solid 4px transparent;}
+body .team_settings>div.selected{border-color: #85d392;background:#E6FFDC;}
 body .team_settings>div>label{display:block;}

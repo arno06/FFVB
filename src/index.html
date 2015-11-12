@@ -86,11 +86,62 @@
             <h1>Classement</h1>
             <h3>G&eacute;n&eacute;ral</h3>
             <div class="ranking">
-                {foreach $content.data $item $key}
+                {foreach $content.data.overall $item $key}
                 <div class="team">
-                    <div class="position">{=add($key, 1)}</div>
+                    <div class="coef" style="width:{$item.coef}%"></div>
+                    <div class="position">{$item.position}</div>
                     <h2>{$item.name}</h2>
                     <div class="points">{$item.championship_points}&nbsp;pts</div>
+                </div>
+                {/foreach}
+            </div>
+            <h3>Points marqu&eacute;s / Points perdus</h3>
+            <div class="ranking">
+                {foreach $content.data.points $item $key}
+                <div class="team">
+                    <div class="position">{$item.position}</div>
+                    <h2>{$item.name}</h2>
+                    <div class="points">{$item.coef}</div>
+                </div>
+                {/foreach}
+            </div>
+            <h3>Points marqu&eacute;s / set</h3>
+            <div class="ranking">
+                {foreach $content.data.points_per_set $item $key}
+                <div class="team">
+                    <div class="position">{$item.position}</div>
+                    <h2>{$item.name}</h2>
+                    <div class="points">{$item.value}&nbsp;pts</div>
+                </div>
+                {/foreach}
+            </div>
+            <h3>Points marqu&eacute;s / match</h3>
+            <div class="ranking">
+                {foreach $content.data.points_per_match $item $key}
+                <div class="team">
+                    <div class="position">{$item.position}</div>
+                    <h2>{$item.name}</h2>
+                    <div class="points">{$item.value}&nbsp;pts</div>
+                </div>
+                {/foreach}
+            </div>
+            <h3>Points perdus / set</h3>
+            <div class="ranking">
+                {foreach $content.data.lost_points_per_set $item $key}
+                <div class="team">
+                    <div class="position">{$item.position}</div>
+                    <h2>{$item.name}</h2>
+                    <div class="points">{$item.value}&nbsp;pts</div>
+                </div>
+                {/foreach}
+            </div>
+            <h3>Points perdus / match</h3>
+            <div class="ranking">
+                {foreach $content.data.lost_points_per_match $item $key}
+                <div class="team">
+                    <div class="position">{$item.position}</div>
+                    <h2>{$item.name}</h2>
+                    <div class="points">{$item.value}&nbsp;pts</div>
                 </div>
                 {/foreach}
             </div>
@@ -98,11 +149,11 @@
         <script type="text/template" id="Index_teams_tpl">
             <h1>&Eacute;quipes</h1>
             <div class="team_settings">
-                <div>
+                <div{if $content.type=="RFB"} class="selected"{/if}>
                     <label for="esf">S&eacute;niors F&eacute;minines<br/>(Poule RFB)</label>
                     <input type="radio" id="esf" value="RFB" name="type"{if $content.type=="RFB"} checked="checked"{/if}>
                 </div>
-                <div>
+                <div{if $content.type=="RME"} class="selected"{/if}>
                     <label for="esm">S&eacute;niors Masculins<br/>(Poule RME)</label>
                     <input type="radio" id="esm" value="RME" name="type"{if $content.type=="RME"} checked="checked"{/if}>
                 </div>
