@@ -257,15 +257,48 @@ class FFVBProxy
 
 		$agenda = array();
 
+        $winning_distance = array();
+        $losing_distance = array();
+
 		for($i = 0, $max = count($agenda_p->tr); $i<$max; $i++)
 		{
 			$day = $agenda_p->tr[$i]->td;
+            $home_name = $this->str($day[3]);
+            $guest_name = $this->str($day[5]);
+
+            if(!$winning_distance[$home_name])
+                $winning_distance[$home_name] = array();
+            if(!$winning_distance[$guest_name])
+                $winning_distance[$guest_name] = array();
+            if(!$losing_distance[$home_name])
+                $losing_distance[$home_name] = array();
+            if(!$losing_distance[$guest_name])
+                $losing_distance[$guest_name] = array();
+
 			if(count($day)==1)
 			{
 				$agenda[] = array("label"=>$this->str($day), "matches"=>array());
 			}
 			else
 			{
+                $sets = explode(", ", $this->str($day[8]));
+                if(count($sets)>1)
+                {
+                    foreach($sets as $s)
+                    {
+                        $p = explode(":", $s);
+                        if($p[0] > $p[1])
+                        {
+                            $winning_distance[$home_name][] = $p[0] - $p[1];
+                            $losing_distance[$guest_name][] = $p[0] - $p[1];
+                        }
+                        else
+                        {
+                            $winning_distance[$guest_name][] = $p[1] - $p[0];
+                            $losing_distance[$home_name][] = $p[1] - $p[0];
+                        }
+                    }
+                }
 				$m_points = explode(":", $this->str($day[9]));
 				if(!isset($m_points[0]))
                     $m_points = array("", "");
@@ -291,12 +324,12 @@ class FFVBProxy
 					"hour"=>$this->str($day[2]),
 					"played"=>$played,
 					"home"=>array(
-						"name"=>$this->str($day[3]),
+						"name"=>$home_name,
 						"set"=>$sets_home,
 						"points"=>$points_home
 					),
 					"guest"=>array(
-						"name"=>$this->str($day[5]),
+						"name"=>$guest_name,
 						"set"=>$sets_guest,
 						"points"=>$points_guest
 					)
@@ -304,13 +337,53 @@ class FFVBProxy
 			}
 		}
 
+        $wd = array();
+        $ld = array();
+        foreach($overall as $e)
+        {
+            $l = isset($losing_distance[$e['name']])?$losing_distance[$e['name']]:array(0);
+            $w = isset($winning_distance[$e['name']])?$winning_distance[$e['name']]:array(0);
+            $lt = 0;
+            $wt = 0;
+            foreach($l as $v)
+                $lt += $v;
+            $lt = round($lt/count($l), 2);
+            foreach($w as $v)
+                $wt += $v;
+            $wt = round($wt/count($w), 2);
+            $wd[] = array(
+                'name'=>$e['name'],
+                'position'=>$e['position'],
+                'value'=>$wt
+            );
+            $ld[] = array(
+                'name'=>$e['name'],
+                'position'=>$e['position'],
+                'value'=>$lt
+            );
+        }
+
+        usort($ld, function($pA, $pB){
+            if($pA['value'] == $pB['value'])
+                return 0;
+            return $pA['value']<$pB['value']?-1:1;
+        });
+        usort($wd, function($pA, $pB){
+            if($pA['value'] == $pB['value'])
+                return 0;
+            return $pA['value']>$pB['value']?-1:1;
+        });
+
+
 		$this->data = array(
 			"ranking"=>array('overall'=>$overall,
                             'points'=>$points,
                             'points_per_set'=>$set_points,
                             'points_per_match'=>$match_points,
                             'lost_points_per_set'=>$lost_set_points,
-                            'lost_points_per_match'=>$lost_match_points),
+                            'lost_points_per_match'=>$lost_match_points,
+                            'average_losing_distance'=>$ld,
+                            'average_winning_distance'=>$wd),
 			"agenda"=>$agenda
 		);
 		$this->storeInCache($this->data);

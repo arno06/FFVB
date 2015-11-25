@@ -30,6 +30,8 @@ body .ranking .team .position{flex-grow: 0;padding:0 10px;font-size:1.2em;}
 body .ranking .team h2{flex-grow: 1;font-weight:normal;}
 body .ranking .team .points{flex-grow: 0;padding: 0 10px;font-size:1.2em;}
 
+body select#rub{padding:10px;width:100%;background:#fafafa;outline:none;}
+
 body .agenda{}
 body .agenda .weekend{margin-bottom:25px;}
 body .agenda .weekend h3{}

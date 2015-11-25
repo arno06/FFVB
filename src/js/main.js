@@ -42,6 +42,14 @@
         ranking:function()
         {
             var ref = this;
+            this.addEventListener(FwJs.lib.events.RENDER_COMPLETE, function(){
+                document.querySelector('select#rub').addEventListener('change', function(e){
+                    document.querySelectorAll('.ranking').forEach(function(pItem){
+                        pItem.style.display = 'none';
+                    });
+                    document.querySelector('.ranking[rel="'+e.currentTarget.value+'"]').style.display = 'block';
+                });
+            });
             retrieveData("ranking", function(pData){
                 ref.addContent('data', pData);
                 ref.dispatchEvent(new Event(FwJs.lib.events.RENDER));

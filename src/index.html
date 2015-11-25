@@ -84,8 +84,17 @@
         </script>
         <script type="text/template" id="Index_ranking_tpl">
             <h1>Classement</h1>
-            <h3>G&eacute;n&eacute;ral</h3>
-            <div class="ranking">
+            <select id="rub">
+                <option value="overall">G&eacute;n&eacute;ral</option>
+                <option value="points">Points marqu&eacute;s / Points perdus</option>
+                <option value="points_per_set">Points marqu&eacute;s / set</option>
+                <option value="points_per_match">Points marqu&eacute;s / match</option>
+                <option value="lost_points_per_set">Points perdus / set</option>
+                <option value="lost_points_per_match">Points perdus / match</option>
+                <option value="average_winning_distance">Diff&eacute;rence de points / set gagn&eacute;</option>
+                <option value="average_losing_distance">Diff&eacute;rence de points / set perdu</option>
+            </select>
+            <div class="ranking" rel="overall">
                 {foreach $content.data.overall $item $key}
                 <div class="team">
                     <div class="coef" style="width:{$item.coef}%"></div>
@@ -95,8 +104,7 @@
                 </div>
                 {/foreach}
             </div>
-            <h3>Points marqu&eacute;s / Points perdus</h3>
-            <div class="ranking">
+            <div class="ranking" rel="points" style="display:none;">
                 {foreach $content.data.points $item $key}
                 <div class="team">
                     <div class="position">{$item.position}</div>
@@ -105,8 +113,7 @@
                 </div>
                 {/foreach}
             </div>
-            <h3>Points marqu&eacute;s / set</h3>
-            <div class="ranking">
+            <div class="ranking" rel="points_per_set" style="display:none;">
                 {foreach $content.data.points_per_set $item $key}
                 <div class="team">
                     <div class="position">{$item.position}</div>
@@ -115,8 +122,7 @@
                 </div>
                 {/foreach}
             </div>
-            <h3>Points marqu&eacute;s / match</h3>
-            <div class="ranking">
+            <div class="ranking" rel="points_per_match" style="display:none;">
                 {foreach $content.data.points_per_match $item $key}
                 <div class="team">
                     <div class="position">{$item.position}</div>
@@ -125,8 +131,7 @@
                 </div>
                 {/foreach}
             </div>
-            <h3>Points perdus / set</h3>
-            <div class="ranking">
+            <div class="ranking" rel="lost_points_per_set" style="display:none;">
                 {foreach $content.data.lost_points_per_set $item $key}
                 <div class="team">
                     <div class="position">{$item.position}</div>
@@ -135,9 +140,26 @@
                 </div>
                 {/foreach}
             </div>
-            <h3>Points perdus / match</h3>
-            <div class="ranking">
+            <div class="ranking" rel="lost_points_per_match" style="display:none;">
                 {foreach $content.data.lost_points_per_match $item $key}
+                <div class="team">
+                    <div class="position">{$item.position}</div>
+                    <h2>{$item.name}</h2>
+                    <div class="points">{$item.value}&nbsp;pts</div>
+                </div>
+                {/foreach}
+            </div>
+            <div class="ranking" rel="average_winning_distance" style="display:none;">
+                {foreach $content.data.average_winning_distance $item $key}
+                <div class="team">
+                    <div class="position">{$item.position}</div>
+                    <h2>{$item.name}</h2>
+                    <div class="points">{$item.value}&nbsp;pts</div>
+                </div>
+                {/foreach}
+            </div>
+            <div class="ranking" rel="average_losing_distance" style="display:none;">
+                {foreach $content.data.average_losing_distance $item $key}
                 <div class="team">
                     <div class="position">{$item.position}</div>
                     <h2>{$item.name}</h2>
